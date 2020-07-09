@@ -295,7 +295,9 @@
        **/
       saveSuccess: {
         type: Function,
-        default() {
+        default(ret) {
+          // TODO 成功后数据操作，后续需要完善
+          this.formDataRequest()
         }
       },
       /**
@@ -303,7 +305,9 @@
        **/
       deleteSuccess: {
         type: Function,
-        default() {
+        default(ret) {
+          // TODO 成功后数据操作，后续需要完善
+          this.formDataRequest()
         }
       },
       /**
@@ -311,7 +315,14 @@
        **/
       editSuccess: {
         type: Function,
-        default() {
+        default(ret) {
+          // TODO 成功后数据操作，后续需要完善
+          const idx = this.tableData.findIndex((item => {
+            return item.id === res.id
+          }))
+          const tmp = this.tableData;
+          this.$set(tmp, idx, this.innerFormDataTemp.edit)
+          this.tableData = tmp
         }
       },
       /**
@@ -508,11 +519,11 @@
        */
       deleteDeal: {
         type: Function,
-        default(ids) {
+        default(selectedItems) {
           return new Promise(resolve => {
             resolve({
               data: {
-                id: ids.map(item => {
+                id: selectedItems.map(item => {
                   return item.id
                 })
               }
@@ -636,6 +647,7 @@
         handler(val, oldVal) {
           if (val !== oldVal) {
             this.axiosRequester.defaults.url = val
+            this.innerComponentStatus.pagination.currentPage = 1
             this.formDataRequest()
           }
         }
@@ -676,16 +688,13 @@
             type: 'warning'
           }).then(() => {
             this.deleteDeal(this.innerComponentStatus.table.selected).then(res => {
-              console.log(res)
               this.axiosRequester.request({
                 method: 'delete',
                 ...res
               }).then(ret => {
                 if (this.assertRequestSuccess(ret)) {
-                  // TODO 成功后数据操作，后续需要完善
-                  this.formDataRequest()
                   // 成功后回调
-                  this.deleteSuccess()
+                  this.deleteSuccess(ret)
                 }
               })
             })
@@ -714,10 +723,8 @@
           data: res
         }).then(ret => {
           if (this.assertRequestSuccess(ret)) {
-            // TODO 成功后数据操作，后续需要完善
-            this.formDataRequest()
             // 成功后回调
-            this.saveSuccess()
+            this.saveSuccess(ret)
           }
         })
       },
@@ -728,15 +735,8 @@
           data: res
         }).then(ret => {
           if (this.assertRequestSuccess(ret)) {
-            // TODO 成功后数据操作，后续需要完善
-            const idx = this.tableData.findIndex((item => {
-              return item.id === res.id
-            }))
-            const tmp = this.tableData;
-            this.$set(tmp, idx, this.innerFormDataTemp.edit)
-            this.tableData = tmp
             // 成功后回调
-            this.editSuccess()
+            this.editSuccess(ret)
           }
         })
       },
@@ -817,7 +817,7 @@
       pageSizeChangeHandle(val) {
         const pagination = this.innerComponentStatus.pagination
         pagination.currentPage = 1
-        this.innerComponentStatus.pagination.pageSize = val
+        pagination.pageSize = val
         this.formDataRequest()
       },
       // 翻页事件处理
