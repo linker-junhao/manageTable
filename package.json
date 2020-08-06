@@ -10,6 +10,11 @@
     "styleguide:build": "vue-styleguidist build",
     "styleguide": "vue-styleguidist server"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linkerGitHub/manageTable.git",
+    "directory": ""
+  },
   "keywords": [
     "admin"
   ],
