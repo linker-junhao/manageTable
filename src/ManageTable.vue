@@ -33,7 +33,7 @@
         @click="deleteItems"
       />
     </div>
-    <el-row style="padding: 10px 0 20px 0">
+    <el-row style="padding: 10px 0 20px 0" v-if="enableColShowSetting || $slots.searchBar">
       <el-col
         v-if="enableColShowSetting"
         :span="2"
@@ -152,27 +152,38 @@
           :rules="formRule"
           :label-width="labelWidthAuto"
         >
-          <el-form-item
+          <div
             v-for="(field, index) in editableField"
-            :key="index"
-            :label="field.label"
-          >
-            <el-input v-model="innerFormDataTemp.newOne[field.prop]"/>
-          </el-form-item>
+            :key="index">
+            <el-form-item
+              :label="field.inputLabel || field.label"
+            >
+              <el-input v-if="field.input === undefined" v-model="innerFormDataTemp.newOne[field.prop]"/>
+              <v-node-render
+                v-else
+                :col="col"
+                :scope="scope"
+                :gen-v-node="col.nodeExpress"
+              />
+            </el-form-item>
+          </div>
         </el-form>
       </slot>
       <template v-slot:footer>
-        <div>
-          <el-button @click="dialogStatus.newOne = false">
-            取 消
-          </el-button>
-          <el-button
-            type="primary"
-            @click="newOneClickHandle(innerFormDataTemp.newOne)"
-          >
-            确 定
-          </el-button>
-        </div>
+        <!-- @slot 新建对话款footer -->
+        <slot name="newOneFoot">
+          <div>
+            <el-button @click="dialogStatus.newOne = false">
+              取 消
+            </el-button>
+            <el-button
+              type="primary"
+              @click="newOneClickHandle(innerFormDataTemp.newOne)"
+            >
+              确 定
+            </el-button>
+          </div>
+        </slot>
       </template>
     </el-dialog>
     <el-dialog
@@ -204,17 +215,20 @@
         </el-form>
       </slot>
       <template v-slot:footer>
-        <div>
-          <el-button @click="dialogStatus.edit = false">
-            取 消
-          </el-button>
-          <el-button
-            type="primary"
-            @click="editClickHandle(innerFormDataTemp.edit)"
-          >
-            确 定
-          </el-button>
-        </div>
+        <!-- @slot 编辑对话款footer -->
+        <slot name="editFooter">
+          <div>
+            <el-button @click="dialogStatus.edit = false">
+              取 消
+            </el-button>
+            <el-button
+              type="primary"
+              @click="editClickHandle(innerFormDataTemp.edit)"
+            >
+              确 定
+            </el-button>
+          </div>
+        </slot>
       </template>
     </el-dialog>
   </div>
