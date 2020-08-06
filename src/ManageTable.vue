@@ -159,11 +159,10 @@
               :label="field.inputLabel || field.label"
             >
               <el-input v-if="field.input === undefined" v-model="innerFormDataTemp.newOne[field.prop]"/>
-              <v-node-render
+              <input-v-node-render
                 v-else
-                :col="col"
-                :scope="scope"
-                :gen-v-node="col.nodeExpress"
+                :form-data="innerFormDataTemp.newOne"
+                :gen-v-node="field.input"
               />
             </el-form-item>
           </div>
@@ -202,16 +201,20 @@
           :rules="formRule"
           :label-width="labelWidthAuto"
         >
-          <el-form-item
+          <div
             v-for="(field, index) in editableField"
-            :key="index"
-            :label="field.label"
-          >
-            <el-input
-              v-model="innerFormDataTemp.edit[field.prop]"
-              :type="innerFormDataTemp.edit[field.prop] && innerFormDataTemp.edit[field.prop].length < 80 ? 'text':'textarea'"
-            />
-          </el-form-item>
+            :key="index">
+            <el-form-item
+              :label="field.inputLabel || field.label"
+            >
+              <el-input v-if="field.input === undefined" v-model="innerFormDataTemp.edit[field.prop]"/>
+              <input-v-node-render
+                v-else
+                :form-data="innerFormDataTemp.edit"
+                :gen-v-node="field.input"
+              />
+            </el-form-item>
+          </div>
         </el-form>
       </slot>
       <template v-slot:footer>
@@ -290,6 +293,24 @@
           }
           if (this.genVNode.constructor === Function) {
             return this.genVNode(createElement, this.scope.row[this.col.prop], this.col, this.scope)
+          }
+        }
+      },
+      InputVNodeRender: {
+        props: {
+          genVNode: {
+            type: Object | Function
+          },
+          formData: {
+            type: Object
+          }
+        },
+        render: function (createElement) {
+          if (this.genVNode.constructor === Object) {
+            return this.genVNode
+          }
+          if (this.genVNode.constructor === Function) {
+            return this.genVNode(createElement, this.formData)
           }
         }
       }
@@ -407,6 +428,9 @@
        * label:  字符串，必须，表示该列显示在表头的值
        * className: 为该列自定义的class
        * width: 定义该列的显示宽度
+       * input: VNode，对应改字段的输入组件
+       * inputLabel: 对应该输入的的label
+       * validRule: 对应的输入校验规则
        * textContent: 文本内容生成回调函数，参数是当前行列的值，当前列定义，当前所在行的整行值，以文本插值的形式输出
        * htmlContent: html内容生成回调函数，参数是当前行列的值，当前列定义，当前所在行的整行值，以HTML的形式输出
        * nodeExpress: VNode生成回调函数，参数是渲染函数createElement，当前行列的值，当前所在行的整行值，以VNode节点的形式输出

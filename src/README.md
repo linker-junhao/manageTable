@@ -18,7 +18,10 @@
   import ManageTable from "../src/ManageTable.vue";
   import {getTotalNumFromRes, getTableDataFromResponse, pageParams, assertRequestSuccess} from '../example/utils.js'
   import axios from "axios";
-
+  import { Input } from "element-ui";
+  import Vue from 'vue'
+  
+  Vue.use(Input)
   const requester = axios.create({
     baseURL: 'http://sp.whhda.xyz/backstage',
     timeout: 10000,
@@ -31,7 +34,9 @@
 
   export default {
     name: 'App',
-    components: {ManageTable},
+    components: {
+      ManageTable
+    },
     data() {
       return {
         requester,
@@ -54,7 +59,20 @@
           {
             label: '类别',
             prop: 'name',
-            editable: true
+            editable: true,
+            input: function(h, f) {
+              return h('el-input', {
+                props: {
+                  value: f.name,
+                  size: 'mini'
+                },
+                on: {
+                  input: function(val) {
+                    f.name = val
+                  }
+                }
+              })
+            }
           }
         ]
       }
