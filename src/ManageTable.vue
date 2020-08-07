@@ -157,6 +157,7 @@
             :key="index">
             <el-form-item
               :label="field.inputLabel || field.label"
+              :prop="field.prop"
             >
               <el-input v-if="field.input === undefined" v-model="innerFormDataTemp.newOne[field.prop]"/>
               <input-v-node-render
@@ -206,6 +207,7 @@
             :key="index">
             <el-form-item
               :label="field.inputLabel || field.label"
+              :prop="field.prop"
             >
               <el-input v-if="field.input === undefined" v-model="innerFormDataTemp.edit[field.prop]"/>
               <input-v-node-render
