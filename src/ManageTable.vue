@@ -275,6 +275,7 @@
       ElInput: Input,
       // 渲染函数
       VNodeRender: {
+        name: 'VNodeRender',
         props: {
           genVNode: {
             type: Object | Function
@@ -297,6 +298,7 @@
         }
       },
       InputVNodeRender: {
+        name: 'InputVNodeRender',
         props: {
           genVNode: {
             type: Object | Function
