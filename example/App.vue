@@ -53,7 +53,10 @@
           {
             label: '类别',
             prop: 'name',
-            editable: true
+            editable: true,
+            input: function (h, r) {
+              return h('div', JSON.stringify(r))
+            }
           }
         ]
       }

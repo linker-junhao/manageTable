@@ -442,21 +442,25 @@
        * 若三者都不选用将直接显示值
        **/
       columnsDefinition: {
-        type: Array,
+        type: [Array, Function],
         required: true,
         validator: (value) => {
           // 这个值必须匹配下列字符串中的一个
-          if (Array.isArray(value)) {
-            value.forEach(function (element) {
-              if (element.prop === undefined || element.label === undefined) {
-                throw new Error(
-                  '使用TheManageTable组件时，column内prop属性和label属性是必须的'
-                )
-              }
-            })
+          if (Array.isArray(value) || value.constructor === Function) {
+            if(value.constructor === Array) {
+              value.forEach(function (element) {
+                if (element.prop === undefined || element.label === undefined) {
+                  throw new Error(
+                    '使用TheManageTable组件时，column内prop属性和label属性是必须的'
+                  )
+                }
+              })
+            }
             return true
           } else {
-            return false
+            throw new Error(
+              '使用TheManageTable组件时，columnsDefinition必须是数组或者返回数组的函数'
+            )
           }
         }
       },
@@ -633,9 +637,21 @@
       }
     },
     computed: {
+      computedColumnDefinition: function() {
+        if(this.columnsDefinition.constructor === Array) {
+          return this.columnsDefinition
+        }
+        if(this.columnsDefinition.constructor === Function) {
+          let tmp = this.innerFormDataTemp.newOne
+          if(this.dialogStatus.edit === true) {
+            tmp = this.innerFormDataTemp.edit
+          }
+          return this.columnsDefinition(tmp)
+        }
+      },
       // 根据column的定义计算出可以被显示在表格中的列
       visibleColumnDefinition: function () {
-        return this.columnsDefinition.filter((item) => {
+        return this.computedColumnDefinition.filter((item) => {
           return item.visible !== false
         })
       },
@@ -654,8 +670,11 @@
         return this.getTotalPageFromResponse(this.sourceData)
       },
       formRule: function () {
-        const ret = {}
-        this.columnsDefinition.forEach(item => {
+        const ret = {
+          newOne: {},
+          edit: {}
+        }
+        this.computedColumnDefinition.forEach(item => {
           if (item.validRule) {
             ret[item.prop] = item.validRule
           }
@@ -663,13 +682,13 @@
         return ret
       },
       editableField: function () {
-        return this.columnsDefinition.filter(item => {
+        return this.computedColumnDefinition.filter(item => {
           return item.editable
         })
       },
       labelWidthAuto: function () {
         let width = 36 + 12
-        this.columnsDefinition.forEach(item => {
+        this.computedColumnDefinition.forEach(item => {
           const tmp = item.label.length * 18 + 12
           if (tmp > width) {
             width = tmp
@@ -680,8 +699,8 @@
     },
     watch: {
       // TODO 根据columnDefinition配置相应字段的初始显示状态，目前是全部开启的，后续需要修改再补充
-      columnsDefinition: function () {
-        this.columnsDefinition.forEach((item, index) => {
+      computedColumnDefinition: function () {
+        this.computedColumnDefinition.forEach((item, index) => {
           this.$set(this.innerComponentStatus.tableColShowFlag, index, true)
         })
       },
@@ -697,7 +716,7 @@
     },
     beforeMount() {
       const thisView = this
-      this.columnsDefinition.forEach(function (item, index) {
+      this.computedColumnDefinition.forEach(function (item, index) {
         thisView.$set(thisView.innerComponentStatus.tableColShowFlag, index, true)
       })
     },
@@ -834,7 +853,7 @@
       // 列筛选栏全选checkbox勾选或取消的处理
       colShowSettingCheckAllHandle(val) {
         const thisView = this
-        this.columnsDefinition.forEach(function (item, index) {
+        this.computedColumnDefinition.forEach(function (item, index) {
           thisView.$set(thisView.innerComponentStatus.tableColShowFlag, index, val)
         })
         this.innerComponentStatus.colShowSetting.checkAllIndeterminate = false
