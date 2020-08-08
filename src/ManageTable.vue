@@ -153,8 +153,8 @@
           :label-width="labelWidthAuto"
         >
           <div
-            v-for="(field, index) in editableField"
-            :key="index">
+            v-for="(field) in editableField"
+            :key="`${field.inputLabel || field.label}${field.prop}`">
             <el-form-item
               :label="field.inputLabel || field.label"
               :prop="field.prop"
@@ -203,8 +203,8 @@
           :label-width="labelWidthAuto"
         >
           <div
-            v-for="(field, index) in editableField"
-            :key="index">
+            v-for="(field) in editableField"
+            :key="`${field.inputLabel || field.label}${field.prop}`">
             <el-form-item
               :label="field.inputLabel || field.label"
               :prop="field.prop"
