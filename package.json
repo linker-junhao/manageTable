@@ -1,6 +1,6 @@
 {
   "name": "managetable",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "a table like manage component for admin backstage, integrated CRUD.",
   "main": "./src/ManageTable.vue",
   "scripts": {

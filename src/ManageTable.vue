@@ -74,7 +74,7 @@
           </el-button>
         </el-popover>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="enableColShowSetting ? 22 : 24">
         <!-- @slot 顶部，一般做筛选搜索的区域 -->
         <slot name="searchBar"/>
       </el-col>
@@ -320,6 +320,12 @@
       }
     },
     props: {
+      extraParams: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
       /**
        * 四个操作按钮wrapper的样式
        **/
@@ -712,6 +718,14 @@
             this.formDataRequest()
           }
         }
+      },
+      extraParams: {
+        handler(val) {
+          this.axiosRequester.defaults.url = val
+          this.innerComponentStatus.pagination.currentPage = 1
+          this.formDataRequest()
+        },
+        deep: true
       }
     },
     beforeMount() {
@@ -894,7 +908,8 @@
         const pagination = this.innerComponentStatus.pagination
         this.axiosRequester.request({
           params: {
-            ...this.constructPageParams(pagination)
+            ...this.constructPageParams(pagination),
+            ...this.extraParams
           }
         }).then(res => {
           this.sourceData = res
