@@ -721,7 +721,7 @@
       },
       extraParams: {
         handler(val) {
-          this.axiosRequester.defaults.url = val
+          this.axiosRequester.defaults.url = this.dataSrcUrl
           this.innerComponentStatus.pagination.currentPage = 1
           this.formDataRequest()
         },
