@@ -127,7 +127,7 @@
     <el-row :style="{'padding-top': '10px'}">
       <el-pagination
         background
-        hide-on-single-page
+        :hide-on-single-page="paginationHideOnSinglePage"
         :current-page="innerComponentStatus.pagination.currentPage"
         :page-sizes="innerComponentStatus.pagination.pageSizes"
         :page-size.sync="innerComponentStatus.pagination.pageSize"
@@ -322,6 +322,12 @@
       }
     },
     props: {
+      paginationHideOnSinglePage: {
+        type: Boolean,
+        default() {
+          return false
+        }
+      },
       /**
        * 表格勾选器是否开启
        **/
