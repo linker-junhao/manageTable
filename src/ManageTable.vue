@@ -149,6 +149,7 @@
         :formData="innerFormDataTemp.newOne"
       >
         <el-form
+          ref="manageTableNewOneForm"
           :model="innerFormDataTemp.newOne"
           :rules="formRule"
           :label-width="labelWidthAuto"
@@ -353,6 +354,7 @@
         default(ret) {
           // TODO 成功后数据操作，后续需要完善
           this.formDataRequest()
+          this.$refs.manageTableNewOneForm.resetFields()
         }
       },
       /**
