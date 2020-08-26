@@ -87,6 +87,7 @@
       @selection-change="tableSelectChangeHandle"
     >
       <el-table-column
+        v-if="tableSelection"
         type="selection"
         width="40"
       />
@@ -320,6 +321,15 @@
       }
     },
     props: {
+      /**
+       * 表格勾选器是否开启
+       **/
+      tableSelection: {
+        type: Boolean,
+        default() {
+          return true
+        }
+      },
       extraParams: {
         type: Object,
         default() {
@@ -363,7 +373,7 @@
         default(ret) {
           // TODO 成功后数据操作，后续需要完善
           const idx = this.tableData.findIndex((item => {
-            return item.id === res.id
+            return item.id === ret.id
           }))
           const tmp = this.tableData;
           this.$set(tmp, idx, this.innerFormDataTemp.edit)

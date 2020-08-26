@@ -1,3 +1,7 @@
+2020年8月26日：
+加入是否使用列表勾选框属性table-selection
+修复默认editSuccess动作
+
 2020年8月14日：
 请求时加入额外的参数做条件过滤
 修复extraParams参数变化的bug
