@@ -966,9 +966,6 @@
   }
 </script>
 
-<style>
-  @import '~element-ui/lib/theme-chalk/index.css';
-</style>
 <style scoped>
   .manage-table-box >>> .col-hide {
     display: none;
