@@ -85,6 +85,8 @@
       border
       style="width: 100%"
       @selection-change="tableSelectChangeHandle"
+      :stripe="stripe"
+      :default-sort="defaultSort"
     >
       <el-table-column
         v-if="tableSelection"
