@@ -90,6 +90,8 @@
         v-if="tableSelection"
         type="selection"
         width="40"
+        @sortChange="$emit('sortChange', ...arguments)"
+        @filterChange="$emit('filterChange', ...arguments)"
       />
       <el-table-column
         v-for="(col, key) of visibleColumnDefinition"
@@ -101,6 +103,9 @@
         :filter-method="col.filterMethod"
         :filter-placement="col.filterPlacement"
         :width="col.width"
+        :sortable="col.sortable"
+        :sort-method="col.sortMethod"
+        :sort-by="col.sortBy"
       >
         <template v-slot="scope">
           <span v-if="col.textContent !== undefined"> {{ col.textContent(scope.row[col.prop], col, scope) }}</span>
@@ -322,6 +327,27 @@
       }
     },
     props: {
+      /**
+       * 默认排序
+       **/
+      defaultSort: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      },
+      /**
+       * 是否斑马纹table
+       **/
+      stripe: {
+        type: Boolean,
+        default() {
+          return false
+        }
+      },
+      /**
+       * 单页时是否隐藏
+       **/
       paginationHideOnSinglePage: {
         type: Boolean,
         default() {

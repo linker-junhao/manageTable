@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <manage-table
+            ref="m-tbl"
             :assert-request-success="assertRequestSuccess"
             :columns-definition="def"
             :data-src-url="'/category'"
@@ -10,6 +11,7 @@
             :get-table-data-from-response="getTableDataFromResponse"
             :operate-area-style="opStyle"
     />
+    <el-button type="primary" @click="callEditOneDialog('m-tbl')">编辑</el-button>
   </div>
 </template>
 
@@ -17,6 +19,7 @@
   import ManageTable from "../src/ManageTable.vue";
   import {getTotalNumFromRes, getTableDataFromResponse, pageParams, assertRequestSuccess} from './utils.js'
   import axios from "axios";
+  import {callEditOneDialog} from "../src/callFuncUtils";
 
   const requester = axios.create({
     baseURL: 'http://sp.whhda.xyz/backstage',
@@ -65,7 +68,8 @@
       assertRequestSuccess,
       pageParams,
       getTotalNumFromRes,
-      getTableDataFromResponse
+      getTableDataFromResponse,
+      callEditOneDialog,
     }
   }
 </script>

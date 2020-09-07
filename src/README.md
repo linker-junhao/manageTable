@@ -2,6 +2,7 @@
 <template>
   <div id="app">
     <manage-table
+            ref="m-tbl"
             :assert-request-success="assertRequestSuccess"
             :columns-definition="def"
             :data-src-url="'/category'"
@@ -11,6 +12,7 @@
             :get-table-data-from-response="getTableDataFromResponse"
             :operate-area-style="opStyle"
     />
+    <el-button type="primary" @click="callEditOneDialog('m-tbl')">编辑</el-button>
   </div>
 </template>
 
@@ -18,10 +20,13 @@
   import ManageTable from "../src/ManageTable.vue";
   import {getTotalNumFromRes, getTableDataFromResponse, pageParams, assertRequestSuccess} from '../example/utils.js'
   import axios from "axios";
-  import { Input } from "element-ui";
+  import { Input, Button } from "element-ui";
   import Vue from 'vue'
+
+  import {callEditOneDialog} from "../src/callFuncUtils";
   
   Vue.use(Input)
+  Vue.use(Button)
   const requester = axios.create({
     baseURL: 'http://sp.whhda.xyz/backstage',
     timeout: 10000,
@@ -54,7 +59,8 @@
         def: [
           {
             label: 'ID',
-            prop: 'id'
+            prop: 'id',
+            sortable: true,
           },
           {
             label: '类别',
@@ -72,7 +78,9 @@
                   }
                 }
               })
-            }
+            },
+            filters: [{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}],
+            filterMethod: (value, row, column) => { console.log(value, row, column); return true }
           }
         ]
       }
@@ -81,7 +89,8 @@
       assertRequestSuccess,
       pageParams,
       getTotalNumFromRes,
-      getTableDataFromResponse
+      getTableDataFromResponse,
+      callEditOneDialog
     }
   }
 </script>
