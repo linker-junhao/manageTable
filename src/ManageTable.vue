@@ -333,7 +333,7 @@
        * 是否边界table
        **/
       border: {
-        type: Object,
+        type: Boolean,
         default() {
           return false
         }
