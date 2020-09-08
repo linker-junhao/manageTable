@@ -82,7 +82,7 @@
     <el-table
       v-loading="innerComponentStatus.table.loading"
       :data="tableData"
-      border
+      :border="border"
       style="width: 100%"
       @selection-change="tableSelectChangeHandle"
       :stripe="stripe"
@@ -329,6 +329,15 @@
       }
     },
     props: {
+      /**
+       * 是否边界table
+       **/
+      border: {
+        type: Object,
+        default() {
+          return false
+        }
+      },
       /**
        * 默认排序
        **/
