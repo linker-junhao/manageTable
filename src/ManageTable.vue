@@ -209,6 +209,7 @@
         <el-form
           :model="innerFormDataTemp.edit"
           :rules="formRule"
+          ref="manageTableEditForm"
           :label-width="labelWidthAuto"
         >
           <div
@@ -410,6 +411,7 @@
         type: Function,
         default(ret) {
           // TODO 成功后数据操作，后续需要完善
+          this.dialogStatus.newOne = false
           this.formDataRequest()
           this.$refs.manageTableNewOneForm.resetFields()
         }
@@ -431,12 +433,14 @@
         type: Function,
         default(ret) {
           // TODO 成功后数据操作，后续需要完善
-          const idx = this.tableData.findIndex((item => {
-            return item.id === ret.id
-          }))
-          const tmp = this.tableData;
-          this.$set(tmp, idx, this.innerFormDataTemp.edit)
-          this.tableData = tmp
+          this.dialogStatus.edit = false
+          this.formDataRequest()
+          // const idx = this.tableData.findIndex((item => {
+          //   return item.id === ret.id
+          // }))
+          // const tmp = this.tableData;
+          // this.$set(tmp, idx, this.innerFormDataTemp.edit)
+          // this.tableData = tmp
         }
       },
       /**
@@ -850,8 +854,11 @@
        */
       newOneFormConfirmHandle() {
         this.newOneDeal(this.innerFormDataTemp.newOne).then((res) => {
-          this.newOneSaveReq(res)
-          this.dialogStatus.newOne = false
+          this.$refs['manageTableNewOneForm'].validate(valid => {
+            if(valid) {
+              this.newOneSaveReq(res)
+            }
+          })
         }).catch(err => {
           Message({
             type: 'warning',
@@ -896,8 +903,11 @@
       editOneFormConfirmHandle() {
         const detachedData = JSON.parse(JSON.stringify(this.innerFormDataTemp.edit))
         this.editDeal(detachedData).then((res) => {
-          this.editSaveReq(res)
-          this.dialogStatus.edit = false
+          this.$refs['manageTableEditForm'].validate(valid => {
+            if(valid) {
+              this.editSaveReq(res)
+            }
+          })
         }).catch(err => {
           Message({
             type: 'warning',
