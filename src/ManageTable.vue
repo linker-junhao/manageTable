@@ -330,6 +330,20 @@
     },
     props: {
       /**
+       * 定义请求方法
+       **/
+      requestMethodDefine: {
+        type: Object,
+        default() {
+          return {
+            get: {},
+            delete: {},
+            update: {},
+            create: {}
+          }
+        }
+      },
+      /**
        * 是否边界table
        **/
       border: {
@@ -820,6 +834,7 @@
             this.deleteDeal(this.innerComponentStatus.table.selected).then(res => {
               this.axiosRequester.request({
                 method: 'delete',
+                ...this.requestMethodDefine.delete,
                 ...res
               }).then(ret => {
                 if (this.assertRequestSuccess(ret)) {
@@ -850,6 +865,7 @@
       newOneSaveReq(res) {
         this.axiosRequester.request({
           method: 'post',
+          ...this.requestMethodDefine.create,
           data: res
         }).then(ret => {
           if (this.assertRequestSuccess(ret)) {
@@ -862,6 +878,7 @@
       editSaveReq(res) {
         this.axiosRequester.request({
           method: 'put',
+          ...this.requestMethodDefine.update,
           data: res
         }).then(ret => {
           if (this.assertRequestSuccess(ret)) {
@@ -962,6 +979,7 @@
         this.innerComponentStatus.table.loading = true
         const pagination = this.innerComponentStatus.pagination
         this.axiosRequester.request({
+          ...this.requestMethodDefine.get,
           params: {
             ...this.constructPageParams(pagination),
             ...this.extraParams
