@@ -782,7 +782,6 @@
       dataSrcUrl: {
         handler(val, oldVal) {
           if (val !== oldVal) {
-            this.axiosRequester.defaults.url = val
             this.innerComponentStatus.pagination.currentPage = 1
             this.formDataRequest()
           }
@@ -790,7 +789,6 @@
       },
       extraParams: {
         handler(val) {
-          this.axiosRequester.defaults.url = this.dataSrcUrl
           this.innerComponentStatus.pagination.currentPage = 1
           this.formDataRequest()
         },
@@ -809,8 +807,6 @@
         ...this.innerComponentStatus.pagination,
         ...this.propPagination
       }
-      // 网络请求器配置
-      this.axiosRequester.defaults.url = this.dataSrcUrl
       // 首次请求数据
       this.formDataRequest()
     },
@@ -832,6 +828,8 @@
             type: 'warning'
           }).then(() => {
             this.deleteDeal(this.innerComponentStatus.table.selected).then(res => {
+              // 网络请求器配置
+              this.axiosRequester.defaults.url = this.dataSrcUrl
               this.axiosRequester.request({
                 method: 'delete',
                 ...this.requestMethodDefine.delete,
@@ -863,6 +861,8 @@
       },
       // 保存新增网络请求
       newOneSaveReq(res) {
+        // 网络请求器配置
+        this.axiosRequester.defaults.url = this.dataSrcUrl
         this.axiosRequester.request({
           method: 'post',
           ...this.requestMethodDefine.create,
@@ -876,6 +876,8 @@
       },
       // 保存编辑网络请求
       editSaveReq(res) {
+        // 网络请求器配置
+        this.axiosRequester.defaults.url = this.dataSrcUrl
         this.axiosRequester.request({
           method: 'put',
           ...this.requestMethodDefine.update,
@@ -978,6 +980,8 @@
       formDataRequest() {
         this.innerComponentStatus.table.loading = true
         const pagination = this.innerComponentStatus.pagination
+        // 网络请求器配置
+        this.axiosRequester.defaults.url = this.dataSrcUrl
         this.axiosRequester.request({
           ...this.requestMethodDefine.get,
           params: {
