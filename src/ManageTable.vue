@@ -96,6 +96,15 @@
         @filterChange="$emit('filterChange', ...arguments)"
       />
       <el-table-column
+          v-if="indexNumber"
+          label="序号"
+          width="80"
+      >
+        <template v-slot="scope">
+          {{ (scope.$index + 1).toString().padStart(2, '0') }}
+        </template>
+      </el-table-column>
+      <el-table-column
         v-for="(col, key) of visibleColumnDefinition"
         :key="key+1"
         :prop="col.prop"
@@ -384,6 +393,15 @@
        * 表格勾选器是否开启
        **/
       tableSelection: {
+        type: Boolean,
+        default() {
+          return true
+        }
+      },
+      /**
+       * 表格序号
+       **/
+      indexNumber: {
         type: Boolean,
         default() {
           return true
