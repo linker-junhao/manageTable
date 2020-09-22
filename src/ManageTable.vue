@@ -84,16 +84,16 @@
       :data="tableData"
       :border="border"
       style="width: 100%"
-      @selection-change="tableSelectChangeHandle"
       :stripe="stripe"
       :default-sort="defaultSort"
+      @selection-change="tableSelectChangeHandle"
+      @sort-change="$emit('sort-change', ...arguments)"
+      @filter-change="$emit('filter-change', ...arguments)"
     >
       <el-table-column
         v-if="tableSelection"
         type="selection"
         width="45"
-        @sortChange="$emit('sortChange', ...arguments)"
-        @filterChange="$emit('filterChange', ...arguments)"
       />
       <el-table-column
           v-if="indexNumber"
@@ -101,7 +101,7 @@
           width="80"
       >
         <template v-slot="scope">
-          {{ (scope.$index + 1).toString().padStart(2, '0') }}
+          {{ ((innerComponentStatus.pagination.currentPage - 1) * innerComponentStatus.pagination.pageSize + scope.$index + 1).toString().padStart(2, '0') }}
         </template>
       </el-table-column>
       <el-table-column
