@@ -91,7 +91,7 @@
       <el-table-column
         v-if="tableSelection"
         type="selection"
-        width="40"
+        width="45"
         @sortChange="$emit('sortChange', ...arguments)"
         @filterChange="$emit('filterChange', ...arguments)"
       />
