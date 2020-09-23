@@ -158,6 +158,7 @@
       :width="newOneDialogWidth"
       :title="dialogTitle.newOne"
       :visible.sync="dialogStatus.newOne"
+      :append-to-body="dialogAppendToBody"
     >
       <!-- @slot 新建对话框 -->
       <slot
@@ -209,6 +210,7 @@
       :width="editDialogWidth"
       :title="dialogTitle.edit"
       :visible.sync="dialogStatus.edit"
+      :append-to-body="dialogAppendToBody"
     >
       <!-- @slot 编辑对话框 -->
       <slot
@@ -339,6 +341,15 @@
       }
     },
     props: {
+      /**
+       * dialogAppendToBody
+       **/
+      dialogAppendToBody: {
+        type: Boolean,
+        default() {
+          return false
+        }
+      },
       /**
        * 定义请求方法
        **/
