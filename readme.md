@@ -1,3 +1,6 @@
+2020年9月24日：
+修改组件name为ManageTable
+
 2020年9月23日：
 增加dialog append to body 选项
 

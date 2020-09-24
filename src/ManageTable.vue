@@ -281,7 +281,7 @@
   Vue.use(Loading)
 
   export default {
-    name: 'Index',
+    name: 'ManageTable',
     components: {
       // element-ui
       ElButton: Button,
