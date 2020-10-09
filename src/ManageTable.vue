@@ -197,6 +197,7 @@
             </el-button>
             <el-button
               type="primary"
+              :loading="confirmLoadingStatus.newOne"
               @click="newOneClickHandle(innerFormDataTemp.newOne)"
             >
               确 定
@@ -249,6 +250,7 @@
             </el-button>
             <el-button
               type="primary"
+              :loading="confirmLoadingStatus.edit"
               @click="editClickHandle(innerFormDataTemp.edit)"
             >
               确 定
@@ -341,6 +343,16 @@
       }
     },
     props: {
+      /**
+       * 是否确认新建或编辑后锁住按钮，直到完成网络请求
+       **/
+      confirmButtonLock: {
+        type: Boolean,
+        default() {
+          return false
+        }
+      },
+
       /**
        * dialogAppendToBody
        **/
@@ -700,6 +712,10 @@
     },
     data() {
       return {
+        confirmActionStatus: {
+          editDoing: false,
+          newOneDoing: false
+        },
         dialogTitle: {
           newOne: '新建',
           edit: '编辑'
@@ -745,6 +761,12 @@
       }
     },
     computed: {
+      confirmLoadingStatus: function () {
+        return {
+          newOne: this.confirmButtonLock && this.confirmActionStatus.newOneDoing,
+          edit: this.confirmButtonLock && this.confirmActionStatus.editDoing,
+        }
+      },
       computedColumnDefinition: function() {
         if(this.columnsDefinition.constructor === Array) {
           return this.columnsDefinition
@@ -899,6 +921,7 @@
       newOneSaveReq(res) {
         // 网络请求器配置
         this.axiosRequester.defaults.url = this.dataSrcUrl
+        this.confirmActionStatus.newOneDoing = true
         this.axiosRequester.request({
           method: 'post',
           ...this.requestMethodDefine.create,
@@ -908,12 +931,15 @@
             // 成功后回调
             this.saveSuccess(ret)
           }
+        }).finally(_ => {
+          this.confirmActionStatus.newOneDoing = false
         })
       },
       // 保存编辑网络请求
       editSaveReq(res) {
         // 网络请求器配置
         this.axiosRequester.defaults.url = this.dataSrcUrl
+        this.confirmActionStatus.editDoing = true
         this.axiosRequester.request({
           method: 'put',
           ...this.requestMethodDefine.update,
@@ -923,6 +949,8 @@
             // 成功后回调
             this.editSuccess(ret)
           }
+        }).finally(_ => {
+          this.confirmActionStatus.editDoing = false
         })
       },
       /**
