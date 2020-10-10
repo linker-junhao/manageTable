@@ -1058,6 +1058,10 @@
         }).then(res => {
           this.sourceData = res
           this.innerComponentStatus.table.loading = false
+          if(this.tableData.length === 0 && this.innerComponentStatus.pagination.currentPage > 1) {
+            this.innerComponentStatus.pagination.currentPage--
+            this.formDataRequest()
+          }
         })
       }
     }
