@@ -3,7 +3,9 @@ import App from './App.vue'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import {manageTableGlobalConfigUtil} from "../index";
+import manageTableGlobalConfigUtil from "../globalConfigUtil";
+
+console.log(manageTableGlobalConfigUtil)
 
 Vue.use(ElementUI)
 
