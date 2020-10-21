@@ -282,6 +282,14 @@
 
   Vue.use(Loading)
 
+  const detectGlobalConfig = function (key) {
+    if(Vue.prototype.$manageTableGlobalConfig && Vue.prototype.$manageTableGlobalConfig[key]) {
+      return Vue.prototype.$manageTableGlobalConfig[key]
+    } else {
+      return null
+    }
+  }
+
   export default {
     name: 'ManageTable',
     components: {
@@ -349,7 +357,7 @@
       confirmButtonLock: {
         type: Boolean,
         default() {
-          return false
+          return detectGlobalConfig('confirmButtonLock') || false
         }
       },
 
@@ -359,7 +367,7 @@
       dialogAppendToBody: {
         type: Boolean,
         default() {
-          return false
+          return detectGlobalConfig('dialogAppendToBody') || false
         }
       },
       /**
@@ -382,7 +390,7 @@
       border: {
         type: Boolean,
         default() {
-          return false
+          return detectGlobalConfig('border') || false
         }
       },
       /**
@@ -391,7 +399,7 @@
       defaultSort: {
         type: Object,
         default: function () {
-          return {}
+          return detectGlobalConfig('defaultSort') || {}
         }
       },
       /**
@@ -400,7 +408,7 @@
       stripe: {
         type: Boolean,
         default() {
-          return false
+          return detectGlobalConfig('stripe') || false
         }
       },
       /**
@@ -409,7 +417,7 @@
       paginationHideOnSinglePage: {
         type: Boolean,
         default() {
-          return false
+          return detectGlobalConfig('paginationHideOnSinglePage') || false
         }
       },
       /**
@@ -418,7 +426,7 @@
       tableSelection: {
         type: Boolean,
         default() {
-          return true
+          return detectGlobalConfig('tableSelection') || true
         }
       },
       /**
@@ -427,13 +435,13 @@
       indexNumber: {
         type: Boolean,
         default() {
-          return true
+          return detectGlobalConfig('indexNumber') || true
         }
       },
       extraParams: {
         type: Object,
         default() {
-          return {}
+          return detectGlobalConfig('extraParams') || {}
         }
       },
       /**
@@ -442,7 +450,7 @@
       operateAreaStyle: {
         type: Object,
         default() {
-          return {}
+          return detectGlobalConfig('operateAreaStyle') || {}
         }
       },
       /**
@@ -451,10 +459,15 @@
       saveSuccess: {
         type: Function,
         default(ret) {
-          // TODO 成功后数据操作，后续需要完善
-          this.dialogStatus.newOne = false
-          this.formDataRequest()
-          this.$refs.manageTableNewOneForm.resetFields()
+          const cfgVal = detectGlobalConfig('saveSuccess')
+          if(cfgVal) {
+            cfgVal(ret)
+          } else {
+            // TODO 成功后数据操作，后续需要完善
+            this.dialogStatus.newOne = false
+            this.formDataRequest()
+            this.$refs.manageTableNewOneForm.resetFields()
+          }
         }
       },
       /**
@@ -464,7 +477,12 @@
         type: Function,
         default(ret) {
           // TODO 成功后数据操作，后续需要完善
-          this.formDataRequest()
+          const cfgVal = detectGlobalConfig('deleteSuccess')
+          if(cfgVal) {
+            cfgVal(ret)
+          } else {
+            this.formDataRequest()
+          }
         }
       },
       /**
@@ -474,8 +492,13 @@
         type: Function,
         default(ret) {
           // TODO 成功后数据操作，后续需要完善
-          this.dialogStatus.edit = false
-          this.formDataRequest()
+          const cfgVal = detectGlobalConfig('editSuccess')
+          if(cfgVal) {
+            cfgVal(ret)
+          } else {
+            this.dialogStatus.edit = false
+            this.formDataRequest()
+          }
           // const idx = this.tableData.findIndex((item => {
           //   return item.id === ret.id
           // }))
@@ -490,7 +513,12 @@
       assertRequestSuccess: {
         type: Function,
         default(res) {
-          return res.data.statusCode === 200
+          const cfgVal = detectGlobalConfig('assertRequestSuccess')
+          if(cfgVal) {
+            return cfgVal(res)
+          } else {
+            return res.data.statusCode === 200
+          }
         }
       },
       /**
@@ -499,7 +527,7 @@
       operateButtons: {
         type: Array,
         default() {
-          return ['add', 'edit', 'refresh', 'delete']
+          return detectGlobalConfig('operateButtons') || ['add', 'edit', 'refresh', 'delete']
         }
       },
       /**
@@ -508,7 +536,7 @@
       dataShaper: {
         type: Function,
         default() {
-          return {}
+          return detectGlobalConfig('dataShaper') || {}
         }
       },
       /**
@@ -518,7 +546,12 @@
       editClickHandle: {
         type: Function,
         default() {
-          this.editOneFormConfirmHandle()
+          const cfgVal = detectGlobalConfig('editClickHandle')
+          if(cfgVal) {
+            cfgVal()
+          } else {
+            this.editOneFormConfirmHandle()
+          }
         }
       },
       /**
@@ -528,23 +561,28 @@
       newOneClickHandle: {
         type: Function,
         default() {
-          this.newOneFormConfirmHandle()
+          const cfgVal = detectGlobalConfig('newOneClickHandle')
+          if(cfgVal) {
+            cfgVal()
+          } else {
+            this.newOneFormConfirmHandle()
+          }
         }
       },
       // 编辑对话款的宽度
       editDialogWidth: {
         type: String,
-        default: '800px'
+        default: detectGlobalConfig('editDialogWidth') || '800px'
       },
       // 新建对话款的宽度
       newOneDialogWidth: {
         type: String,
-        default: '800px'
+        default: detectGlobalConfig('newOneDialogWidth') || '800px'
       },
       // 是否显示左侧顶部列显示筛选栏
       enableColShowSetting: {
         type: Boolean,
-        default: true
+        default: detectGlobalConfig('enableColShowSetting') || true
       },
       /** 对应table data在显示时各个列的情况定义
        * 选项说明：
@@ -592,7 +630,7 @@
       propPagination: {
         type: Object,
         default() {
-          return {
+          return detectGlobalConfig('propPagination') || {
             pageSizes: [5, 10, 20, 50, 100, 300, 500],
             pageSize: 10
           }
@@ -603,8 +641,13 @@
        */
       getTableDataFromResponse: {
         type: Function,
-        default: (res) => {
-          return res.data && res.data.data ? res.data.data.rows : []
+        default(res) {
+          const cfgVal = detectGlobalConfig('getTableDataFromResponse')
+          if(cfgVal) {
+            return cfgVal(res)
+          } else {
+            return res.data && res.data.data ? res.data.data.rows : []
+          }
         }
       },
       /**
@@ -612,8 +655,13 @@
        */
       getTotalPageFromResponse: {
         type: Function,
-        default: (res) => {
-          return res.data && res.data.data ? res.data.data.num.all : 0
+        default(res) {
+          const cfgVal = detectGlobalConfig('getTotalPageFromResponse')
+          if(cfgVal) {
+            return cfgVal(res)
+          } else {
+            return res.data && res.data.data ? res.data.data.num.all : 0
+          }
         }
       },
       /**
@@ -703,9 +751,14 @@
       constructPageParams: {
         type: Function,
         default(page) {
-          return {
-            skip: (page.currentPage - 1) * page.pageSize,
-            take: page.pageSize
+          const cfgVal = detectGlobalConfig('constructPageParams')
+          if(cfgVal) {
+            return cfgVal(page)
+          } else {
+            return {
+              skip: (page.currentPage - 1) * page.pageSize,
+              take: page.pageSize
+            }
           }
         }
       }
