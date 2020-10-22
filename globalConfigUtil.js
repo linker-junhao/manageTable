@@ -1,4 +1,4 @@
-import mergeWebpackConfig from "vue-styleguidist/lib/scripts/utils/mergeWebpackConfig";
+const { merge } = require('webpack-merge')
 
 const manageTableGlobalConfigUtil = {
   install(vue, config){
@@ -10,7 +10,7 @@ const manageTableGlobalConfigUtil = {
           value: (modifyConfig) => {
             Object.defineProperties(vue.prototype, {
               '$manageTableGlobalConfig': {
-                value: mergeWebpackConfig(vue.prototype.$manageTableGlobalConfig, modifyConfig)
+                value: merge(vue.prototype.$manageTableGlobalConfig, modifyConfig)
               }
             })
           }
