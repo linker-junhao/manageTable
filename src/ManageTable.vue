@@ -676,9 +676,20 @@
        */
       axiosRequester: {
         validator: function (val) {
-          return val.constructor === Function
+          return val.constructor === Function || val.constructor === Object
         },
         default() {
+          const cfgVal = detectGlobalConfig('axiosRequester')
+          if(cfgVal) {
+            if(cfgVal.create !== undefined) {
+              return cfgVal.create({
+                url: this.dataSrcUrl
+              })
+            } else {
+              // axios instance
+              return cfgVal
+            }
+          }
           return Axios.create({
             url: this.dataSrcUrl
           })
