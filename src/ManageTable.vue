@@ -613,7 +613,6 @@ export default {
       type: Boolean,
       default() {
         const cfgVal = detectGlobalConfig('enableColShowSetting')
-        console.log(cfgVal)
         if (cfgVal !== null) {
           return cfgVal
         }
