@@ -2,6 +2,9 @@
 基于element的table和axios，本组件封装了增删改查等基本操作的表格样式管理组件
 
 ### update log
+* 2020年10月26日：
+增加toggleRowSelection和clearSelection方法
+
 * 2020年10月22日：
 修复合并配置的包引用错误的问题
 修复不能全局注入axiosRequester的问题

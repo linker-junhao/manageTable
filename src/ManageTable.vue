@@ -80,6 +80,7 @@
       </el-col>
     </el-row>
     <el-table
+        ref="data-table"
         v-loading="innerComponentStatus.table.loading"
         :data="tableData"
         :border="border"
@@ -965,6 +966,20 @@ export default {
     this.formDataRequest()
   },
   methods: {
+    /**
+     * 设置选中列
+     * @public
+     **/
+    toggleRowSelection(row, selected) {
+      this.$refs['data-table'].toggleRowSelection(row, selected)
+    },
+    /**
+     * 清除选中列
+     * @public
+     **/
+    clearSelection() {
+      this.$refs['data-table'].clearSelection()
+    },
     /**
      * 删除请求
      * @public
