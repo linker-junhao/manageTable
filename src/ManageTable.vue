@@ -86,6 +86,7 @@
         :border="border"
         style="width: 100%"
         :stripe="stripe"
+        :span-method="spanMethod"
         :default-sort="defaultSort"
         @selection-change="tableSelectChangeHandle"
         @sort-change="$emit('sort-change', ...arguments)"
@@ -354,6 +355,15 @@ export default {
   },
   props: {
     /**
+     * 合并行列方法
+     **/
+    spanMethod: {
+      type: Function,
+      default() {
+        return undefined
+      }
+    },
+    /**
      * 是否确认新建或编辑后锁住按钮，直到完成网络请求
      **/
     confirmButtonLock: {
@@ -537,6 +547,21 @@ export default {
         // this.tableData = tmp
       }
     },
+    /**
+     * 请求列表数据成功的回调
+     **/
+    getTableDataSuccess: {
+      type: Function,
+      default(ret) {
+        // TODO 成功后数据操作，后续需要完善
+        const cfgVal = detectGlobalConfig('getTableDataSuccess')
+        if (cfgVal) {
+          cfgVal(ret)
+        } else {
+        }
+      }
+    },
+
     /**
      * 判定请求是否成功的判定器，在增删改的请求发出并接收到返回数据后，会调用此判定请求是否成功
      **/
@@ -1175,6 +1200,9 @@ export default {
         if (this.tableData.length === 0 && this.innerComponentStatus.pagination.currentPage > 1) {
           this.innerComponentStatus.pagination.currentPage--
           this.formDataRequest()
+        }
+        if(this.assertRequestSuccess(res)){
+          this.getTableDataSuccess(res)
         }
       })
     }
