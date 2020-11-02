@@ -121,6 +121,13 @@
           :sort-method="col.sortMethod"
           :sort-by="col.sortBy"
       >
+        <template v-slot:header="scope" v-if="col.nodeExpressHeaderLabel">
+          <v-node-render
+              :col="col"
+              :scope="scope"
+              :gen-v-node="col.nodeExpressHeaderLabel"
+          />
+        </template>
         <template v-slot="scope">
           <span v-if="col.textContent !== undefined"> {{ col.textContent(scope.row[col.prop], col, scope) }}</span>
 
@@ -328,8 +335,10 @@ export default {
         if (this.genVNode.constructor === Object) {
           return this.genVNode
         }
-        if (this.genVNode.constructor === Function) {
+        if (this.genVNode.constructor === Function && this.scope.row !== undefined) {
           return this.genVNode(createElement, this.scope.row[this.col.prop], this.col, this.scope)
+        } else if (this.scope.row === undefined) {
+          return this.genVNode(createElement, this.scope)
         }
       }
     },
@@ -654,6 +663,7 @@ export default {
      * input: VNode，对应改字段的输入组件
      * inputLabel: 对应该输入的的label
      * validRule: 对应的输入校验规则
+     * nodeExpressHeaderLabel: 表头渲染函数
      * textContent: 文本内容生成回调函数，参数是当前行列的值，当前列定义，当前所在行的整行值，以文本插值的形式输出
      * htmlContent: html内容生成回调函数，参数是当前行列的值，当前列定义，当前所在行的整行值，以HTML的形式输出
      * nodeExpress: VNode生成回调函数，参数是渲染函数createElement，当前行列的值，当前所在行的整行值，以VNode节点的形式输出
