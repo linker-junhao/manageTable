@@ -1177,6 +1177,7 @@ export default {
     // 表格多选勾选事件处理
     tableSelectChangeHandle(val) {
       this.innerComponentStatus.table.selected = val
+      this.$emit('selection-change', val)
     },
     // 翻页大小改变的处理
     pageSizeChangeHandle(val) {
