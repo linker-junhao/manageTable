@@ -1,6 +1,6 @@
 <template>
   <div class="manage-table-box">
-    <div class="operate-area" :style="operateAreaStyle">
+    <div class="operate-area" :style="operateAreaStyle" v-if="operateButtons.length > 0">
       <el-button
           v-if="operateButtons.includes('add')"
           circle
