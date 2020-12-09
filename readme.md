@@ -2,6 +2,9 @@
 基于element的table和axios，本组件封装了增删改查等基本操作的表格样式管理组件
 
 ### update log
+* 2020年12月9日：
+修改排序箭头
+
 * 2020年11月25日：
 增加勾选框变化的事件'selection-change'
 
