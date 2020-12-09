@@ -57,6 +57,7 @@
             label: '类别',
             prop: 'name',
             editable: true,
+            sortable: true,
             input: function (h, r) {
               return h('div', JSON.stringify(r))
             }
@@ -75,9 +76,4 @@
 </script>
 
 <style scoped>
-  #app >>> {
-    .operate-area{
-
-    }
-  }
 </style>

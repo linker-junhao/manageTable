@@ -89,8 +89,8 @@
         :span-method="spanMethod"
         :default-sort="defaultSort"
         @selection-change="tableSelectChangeHandle"
-        @sort-change="$emit('sort-change', ...arguments)"
-        @filter-change="$emit('filter-change', ...arguments)"
+        @sort-change="$emit('sort-change', $event)"
+        @filter-change="$emit('filter-change', $event)"
     >
       <el-table-column
           v-if="tableSelection"
@@ -1224,6 +1224,52 @@ export default {
 <style scoped>
 .manage-table-box >>> .col-hide {
   display: none;
+}
+.manage-table-box >>> .caret-wrapper {
+  display: inline-flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+}
+.manage-table-box >>> .caret-wrapper > i {
+  border-top-color: transparent!important;
+  border-bottom-color: transparent!important;
+  font-family: element-icons!important;
+  speak: none;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;                   
+  text-transform: none;          
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  font-weight: bolder;
+  display: block;
+  width: 100%;
+  height: 50%;
+  top: initial;
+  bottom: initial;
+  border: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.manage-table-box >>> .caret-wrapper > i:first-child:before, .manage-table-box >>> .caret-wrapper > i:last-child:before {
+  position: absolute;
+}
+.manage-table-box >>> .caret-wrapper > i:first-child:before {
+    content: "\e6e1";
+}
+.manage-table-box >>> .caret-wrapper > i:last-child:before {
+    content: "\e6df";
+}
+.manage-table-box >>> .ascending .sort-caret.ascending {
+  color: #409eff;
+}
+.manage-table-box >>> .descending .sort-caret.descending {
+  color: #409eff;
 }
 
 .manage-table-box {
