@@ -1258,6 +1258,7 @@ export default {
 }
 .manage-table-box >>> .caret-wrapper > i:first-child:before, .manage-table-box >>> .caret-wrapper > i:last-child:before {
   position: absolute;
+  color: rgb(198, 198, 198)
 }
 .manage-table-box >>> .caret-wrapper > i:first-child:before {
     content: "\e6e1";
@@ -1265,11 +1266,11 @@ export default {
 .manage-table-box >>> .caret-wrapper > i:last-child:before {
     content: "\e6df";
 }
-.manage-table-box >>> .ascending .sort-caret.ascending {
-  color: #409eff;
+.manage-table-box >>> .ascending .sort-caret.ascending:before {
+  color: rgb(56, 78, 161);
 }
-.manage-table-box >>> .descending .sort-caret.descending {
-  color: #409eff;
+.manage-table-box >>> .descending .sort-caret.descending:before {
+  color:rgb(56, 78, 161);
 }
 
 .manage-table-box {
