@@ -1029,7 +1029,7 @@ export default {
     this.formDataRequest()
   },
   beforeDestroy() {
-    setCache(thisView, thisView.cacheName)
+    setCache(this, this.cacheName)
   },
   methods: {
     /**
