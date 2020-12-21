@@ -300,6 +300,24 @@ const detectGlobalConfig = function (key) {
   }
 }
 
+const getCache = function (istc, cacheName) {
+  const allCache = Vue.prototype.$manageTableGlobalConfig ? Vue.prototype.$manageTableGlobalConfig.cache : undefined
+  if(allCache && cacheName && allCache[cacheName] && allCache[cacheName]._data) {
+    istc._data = allCache[cacheName]._data
+  }
+}
+
+const setCache = function (istc, cacheName) {
+  if(istc && cacheName) {
+    if(!Vue.prototype.$manageTableGlobalConfig) {
+      Vue.prototype.$manageTableGlobalConfig = {
+        cache: {[cacheName]: {}}
+      }
+    }
+    Vue.prototype.$manageTableGlobalConfig.cache[cacheName]._data = istc._data
+  }
+}
+
 export default {
   name: 'ManageTable',
   components: {
@@ -363,6 +381,15 @@ export default {
     }
   },
   props: {
+    /**
+     * 使用缓存
+     */
+    cacheName: {
+      type: String,
+      defualt() {
+        return ''
+      }
+    },
     /**
      * 合并行列方法
      **/
@@ -987,6 +1014,7 @@ export default {
   },
   beforeMount() {
     const thisView = this
+    getCache(thisView, thisView.cacheName)
     this.computedColumnDefinition.forEach(function (item, index) {
       thisView.$set(thisView.innerComponentStatus.tableColShowFlag, index, true)
     })
@@ -999,6 +1027,9 @@ export default {
     }
     // 首次请求数据
     this.formDataRequest()
+  },
+  beforeDestroy() {
+    setCache(thisView, thisView.cacheName)
   },
   methods: {
     /**
