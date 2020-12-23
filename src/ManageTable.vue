@@ -931,14 +931,14 @@ export default {
     },
     computedColumnDefinition: function () {
       if (this.columnsDefinition.constructor === Array) {
-        return this.columnsDefinition
+        return this.columnsDefinition.filter(col => col !== null && col !== undefined)
       }
       if (this.columnsDefinition.constructor === Function) {
         let tmp = this.innerFormDataTemp.newOne
         if (this.dialogStatus.edit === true) {
           tmp = this.innerFormDataTemp.edit
         }
-        return this.columnsDefinition(tmp)
+        return this.columnsDefinition(tmp).filter(col => col !== null && col !== undefined)
       }
     },
     // 根据column的定义计算出可以被显示在表格中的列

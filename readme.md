@@ -2,6 +2,9 @@
 基于element的table和axios，本组件封装了增删改查等基本操作的表格样式管理组件
 
 ### update log
+* 2020年12月23日：
+增加列定义对undefined和null的过滤
+
 * 2020年12月21日：
 增加状态缓存
 
