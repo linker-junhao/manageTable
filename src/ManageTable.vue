@@ -537,7 +537,7 @@ export default {
       default(ret) {
         const cfgVal = detectGlobalConfig('saveSuccess')
         if (cfgVal) {
-          cfgVal(ret)
+          cfgVal.call(this, ret)
         } else {
           // TODO 成功后数据操作，后续需要完善
           this.dialogStatus.newOne = false
@@ -555,7 +555,7 @@ export default {
         // TODO 成功后数据操作，后续需要完善
         const cfgVal = detectGlobalConfig('deleteSuccess')
         if (cfgVal) {
-          cfgVal(ret)
+          cfgVal.call(this, ret)
         } else {
           this.formDataRequest()
         }
@@ -570,7 +570,7 @@ export default {
         // TODO 成功后数据操作，后续需要完善
         const cfgVal = detectGlobalConfig('editSuccess')
         if (cfgVal) {
-          cfgVal(ret)
+          cfgVal.call(this, ret)
         } else {
           this.dialogStatus.edit = false
           this.formDataRequest()
@@ -592,7 +592,7 @@ export default {
         // TODO 成功后数据操作，后续需要完善
         const cfgVal = detectGlobalConfig('getTableDataSuccess')
         if (cfgVal) {
-          cfgVal(ret)
+          cfgVal.call(this, ret)
         } else {
         }
       }
@@ -606,7 +606,7 @@ export default {
       default(res) {
         const cfgVal = detectGlobalConfig('assertRequestSuccess')
         if (cfgVal) {
-          return cfgVal(res)
+          return cfgVal.call(this, res)
         } else {
           return res.data.statusCode === 200
         }
@@ -639,7 +639,7 @@ export default {
       default() {
         const cfgVal = detectGlobalConfig('editClickHandle')
         if (cfgVal) {
-          cfgVal()
+          cfgVal.call(this)
         } else {
           this.editOneFormConfirmHandle()
         }
@@ -654,7 +654,7 @@ export default {
       default() {
         const cfgVal = detectGlobalConfig('newOneClickHandle')
         if (cfgVal) {
-          cfgVal()
+          cfgVal.call(this)
         } else {
           this.newOneFormConfirmHandle()
         }
@@ -742,7 +742,7 @@ export default {
       default(res) {
         const cfgVal = detectGlobalConfig('getTableDataFromResponse')
         if (cfgVal) {
-          return cfgVal(res)
+          return cfgVal.call(this, res)
         } else {
           return res.data && res.data.data ? res.data.data.rows : []
         }
@@ -756,7 +756,7 @@ export default {
       default(res) {
         const cfgVal = detectGlobalConfig('getTotalPageFromResponse')
         if (cfgVal) {
-          return cfgVal(res)
+          return cfgVal.call(this, res)
         } else {
           return res.data && res.data.data ? res.data.data.num.all : 0
         }
@@ -862,7 +862,7 @@ export default {
       default(page) {
         const cfgVal = detectGlobalConfig('constructPageParams')
         if (cfgVal) {
-          return cfgVal(page)
+          return cfgVal.call(this, page)
         } else {
           return {
             skip: (page.currentPage - 1) * page.pageSize,
